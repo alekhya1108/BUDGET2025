@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union Budget 2025 Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .chat-body {
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        .chat-footer button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .chat-footer button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 15px;
+        }
+        .message.user {
+            text-align: right;
+        }
+        .message.bot {
+            text-align: left;
+        }
+        .message p {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .message.user p {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .message.bot p {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Union Budget 2025 Chatbot</div>
+        <div class="chat-body" id="chat-body">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your question here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Q&A dataset
+        const qaData = {
+            "What are the key objectives of Budget 2025-26?": "The budget aims to accelerate growth, ensure inclusive development, boost private sector investment, uplift household sentiment, and enhance the spending power of the middle class.",
+            "What is the theme of Budget 2025-26?": "The theme is to leverage four key engines—Agriculture, MSMEs, Investment, and Exports—while using Reforms as the fuel and Inclusivity as the guiding spirit, to achieve Viksit Bharat.",
+            "What are the six key areas of transformative reforms proposed in the budget?": "The six key areas are Taxation, Power Sector, Urban Development, Mining, Financial Sector, and Regulatory Reforms.",
+            "What is the ‘Prime Minister Dhan-Dhaanya Krishi Yojana’?": "It is a scheme aimed at enhancing agricultural productivity, crop diversification, post-harvest storage, irrigation, and credit availability in 100 low-productivity districts.",
+            "What is the target of the ‘Mission for Aatmanirbharta in Pulses’?": "The six-year mission focuses on achieving self-sufficiency in pulses like Tur, Urad, and Masoor by ensuring seed development, procurement, and sustainable production.",
+            "What initiatives have been taken for MSMEs?": "MSME investment and turnover limits have been revised, credit availability has been enhanced, customized credit cards introduced, and funds for startups increased.",
+            "What is the ‘National Manufacturing Mission’?": "It aims to boost manufacturing competitiveness, promote clean-tech manufacturing, and provide policy support to industries.",
+            "What initiatives are proposed under ‘Investing in People’?": "The government plans to enhance nutrition programs, improve broadband connectivity in rural schools, expand medical education, and set up skilling centers.",
+            "What are the tax reforms introduced in this budget?": "The government proposes a new Income Tax Bill, reduction of TDS/TCS complexities, personal income tax reforms, and incentives for voluntary tax compliance.",
+            "How does the budget address infrastructure development?": "The budget extends support for Public-Private Partnerships (PPPs), state capital expenditure, and asset monetization while launching new infrastructure projects.",
+            "What fiscal deficit targets are set for 2025-26?": "The fiscal deficit for 2025-26 is estimated at 4.4% of GDP.",
+            "How does the budget support exports?": "An Export Promotion Mission is introduced to provide credit access, support MSMEs, and integrate India with global supply chains.",
+            "What are the proposed changes in customs duties?": "The budget rationalizes tariff structures, removes duty inversion, and introduces concessions on critical minerals, electric vehicle batteries, and medical drugs.",
+            "How does the budget support clean energy?": "A Nuclear Energy Mission aims to develop 100 GW nuclear energy by 2047, with private sector participation in Small Modular Reactors (SMRs).",
+            "What measures are taken for labor-intensive sectors?": "The budget includes a Footwear & Leather Sector Scheme, a Toy Manufacturing Scheme, and enhanced support for the food processing industry.",
+            "How does the budget benefit the middle class in terms of taxation?": "The income tax exemption limit has been raised to ₹12 lakh under the new tax regime, and the slab rates have been revised to reduce tax burdens."
+        };
+
+        // Function to find the best match for a user's question
+        function getAnswer(userQuestion) {
+            userQuestion = userQuestion.toLowerCase().trim();
+            let bestMatch = "";
+            let bestScore = 0;
+
+            for (const question in qaData) {
+                const score = calculateSimilarity(userQuestion, question.toLowerCase());
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = question;
+                }
+            }
+
+            if (bestScore >= 0.7) { // Threshold for a good match
+                return qaData[bestMatch];
+            } else {
+                return "Sorry, I couldn't find a relevant answer. Please rephrase your question.";
+            }
+        }
+
+        // Simple similarity calculation (for demonstration purposes)
+        function calculateSimilarity(str1, str2) {
+            const words1 = str1.split(" ");
+            const words2 = str2.split(" ");
+            const commonWords = words1.filter(word => words2.includes(word));
+            return commonWords.length / Math.max(words1.length, words2.length);
+        }
+
+        // Function to send a message
+        function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            // Display user's message
+            const chatBody = document.getElementById("chat-body");
+            const userMessage = document.createElement("div");
+            userMessage.className = "message user";
+            userMessage.innerHTML = `<p>${userInput}</p>`;
+            chatBody.appendChild(userMessage);
+
+            // Get chatbot's response
+            const botResponse = getAnswer(userInput);
+            const botMessage = document.createElement("div");
+            botMessage.className = "message bot";
+            botMessage.innerHTML = `<p>${botResponse}</p>`;
+            chatBody.appendChild(botMessage);
+
+            // Clear input and scroll to bottom
+            document.getElementById("user-input").value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Allow pressing Enter to send a message
+        document.getElementById("user-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
